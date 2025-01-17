@@ -24,13 +24,15 @@ enum layer_number {
     _FUNCTION,
 };
 
+
+
 // Tap-hold configurations
 #define CMD_FN     LT(_FUNCTION, KC_NO)    // Tap: none, Hold: Function layer + Command
-#define NAV_SPC    LT(_NAVIGATION, KC_SPC) // Tap: Space, Hold: Navigation layer
-#define CMD_BSP    RGUI_T(KC_BSPC)        // Tap: Backspace, Hold: Right Command
-#define OPT_DEL    RALT_T(KC_DEL)         // Tap: Delete, Hold: Right Option
+#define OPT_DEL    LALT_T(KC_DEL)         // Tap: Delete, Hold: Option
+#define ENT_SFT    RSFT_T(KC_ENT)         // Tap: Enter, Hold: Right Shift
 #define FN_LBRC    LT(_FUNCTION, KC_LBRC) // Tap: [, Hold: Function layer
 #define FN_RBRC    LT(_FUNCTION, KC_RBRC) // Tap: ], Hold: Function layer
+#define NAV_L2     MO(_NAVIGATION)        // Navigation layer when held
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -41,43 +43,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |fn/Cmd|   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|  [/L3  |    |  ]/L3 |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
+ * |------+------+------+------+------+------| [ /L3 |    | ] /L3 |------+------+------+------+------+------|
+ * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |Enter/RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | Ctl |  Opt  | Cmd  | /Sp/L2  /       \Enter \  |Bp/Cmd|Dl/Opt| Ctl  |
+ *                   | Ctl |  Opt  | Cmd  | / Space /       \ Enter\  |BckSp |Dl/Opt|  L2  |
  *                   |     |       |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
-
 [_QWERTY] = LAYOUT(
-  KC_ESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                       KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL,
-  KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
-  CMD_FN,   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                       KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-  KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,  FN_LBRC,  FN_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-                   KC_LCTL, KC_LOPT, KC_LGUI, NAV_SPC,               KC_ENT,  CMD_BSP, OPT_DEL, KC_RCTL
+  KC_ESC,   KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL,
+  KC_TAB,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
+  CMD_FN,   KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+  KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,  FN_LBRC,   FN_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, ENT_SFT,
+                   KC_LCTL, KC_LOPT, KC_LGUI, KC_SPC,                      KC_ENT,  KC_BSPC, OPT_DEL, NAV_L2
 ),
 
 /* Layer 2: Navigation
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * | ESC  |      |ShCmd2|ShCmd3|ShCmd4| Home |                    |      | Prev | Play | Next | Mute |VolUp |
+ * | ESC  |      |ShCmd2|ShCmd3|ShCmd4| Home |                    |      |MPrev |MPlay |MNext |Mute  |VolUp |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |      |  ←   |   ↑  |   →  |PgUp |                    |      |  ←   |   ↑  |   →  |      |VolDn |
+ * | Tab  |      |      |  ↑   |      | PgUp |                    |      |      |  ↑   |      |      |VolDn |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |fn/Cmd|      |      |   ↓  |      |PgDn |-------.    ,-------|   ~  |   |  |   :  |   .  |   \  |  '   |
- * |------+------+------+------+------+------|  [/L3  |    |  ]/L3|------+------+------+------+------+------|
- * |LShift|      |      |      |      | End |-------|    |-------|      |      |      |      |      |RShift|
+ * |fn/Cmd|      |  ←   |  ↓   |  →   | PgDn |-------.    ,-------|   ~  |  ←   |  ↓   |  →   |   \  |  "   |
+ * |------+------+------+------+------+------| [/L3  |    | ]/L3  |------+------+------+------+------+------|
+ * |LShift|      |      |      |      | End  |-------|    |-------|      |      |      |      |      |Enter/RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | Ctl |  Opt  | Cmd  | /Space /       \Enter \  |BckSp |  Del | Ctl  |
- *                   |     |       |      |/      /         \      \ |      |      |      |
+ *                   | Ctl |  Opt  | Cmd  | /Space  /       \Enter \  |BckSp |Dl/Opt|  L2  |
+ *                   |     |       |      |/       /         \      \ |      |      |      |
  *                   `---------------------------'           '------''--------------------'
  */
-
 [_NAVIGATION] = LAYOUT(
-  KC_ESC,   KC_NO,   G(S(KC_2)), G(S(KC_3)), G(S(KC_4)), KC_HOME,                     KC_NO,   KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_VOLU,
-  KC_TAB,   KC_NO,   KC_LEFT,    KC_UP,      KC_RGHT,    KC_PGUP,                     KC_NO,   KC_LEFT, KC_UP,   KC_RGHT, KC_NO,   KC_VOLD,
-  CMD_FN,   KC_NO,   KC_NO,      KC_DOWN,    KC_NO,      KC_PGDN,                     KC_TILD, KC_PIPE, KC_COLN, KC_DOT,  KC_BSLS, KC_QUOT,
-  KC_LSFT,  KC_NO,   KC_NO,      KC_NO,      KC_NO,      KC_END,   FN_LBRC, FN_RBRC, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_RSFT,
-                   KC_LCTL,     KC_LOPT,    KC_LGUI,    KC_SPC,                     KC_ENT,  KC_BSPC, KC_DEL,  KC_RCTL
+  KC_ESC,   KC_NO,   G(S(KC_2)), G(S(KC_3)), G(S(KC_4)), KC_HOME,                     KC_NO,   KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, KC_AUDIO_MUTE, KC_AUDIO_VOL_UP,
+  KC_TAB,   KC_NO,   KC_NO,      KC_UP,      KC_NO,      KC_PGUP,                     KC_NO,   KC_NO,   KC_UP,   KC_NO,   KC_NO,   KC_AUDIO_VOL_DOWN,
+  CMD_FN,   KC_NO,   KC_LEFT,    KC_DOWN,    KC_RGHT,    KC_PGDN,                     KC_TILD, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSLS, S(KC_QUOT),
+  KC_LSFT,  KC_NO,   KC_NO,      KC_NO,      KC_NO,      KC_END,  FN_LBRC, FN_RBRC,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   ENT_SFT,
+                   KC_LCTL,     KC_LOPT,    KC_LGUI,    KC_SPC,                     KC_ENT,  KC_BSPC, OPT_DEL, KC_TRNS
 ),
 
 /* Layer 3: Function
@@ -87,22 +87,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Tab  |   *  |   1  |   2  |   3  |  +   |                    |MWhlUp|MLeft |  MUp |MRight|      | F12  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |fn/Cmd|   /  |   4  |   5  |   6  |  -   |-------.    ,-------|MWhlDn|MLeft |MDown |MRight|PrtSc |  '   |
- * |------+------+------+------+------+------|  [/L3  |    |  ]/L3 |------+------+------+------+------+------|
- * |LShift|   ^  |   7  |   8  |   9  |   .  |-------|    |-------|Insert|Pause |ScrLk |NumLk |PrtSc |RShift|
+ * |------+------+------+------+------+------|  [/L3 |    | ]/L3  |------+------+------+------+------+------|
+ * |LShift|   ^  |   7  |   8  |   9  |   .  |-------|    |-------|Insert|Pause |ScrLk |NumLk |PrtSc |Enter/RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | Ctl |  Opt  | Cmd  | /  0   /       \Enter \  |BckSp |  Del | Ctl  |
- *                   |     |       |      |/      /         \      \ |      |      |      |
+ *                   | Ctl |  Opt  | Cmd  | / Space /       \Enter \  |BckSp |Dl/Opt|  L2  |
+ *                   |     |       |      |/       /         \      \ |      |      |      |
  *                   `---------------------------'           '------''--------------------'
  */
-
 [_FUNCTION] = LAYOUT(
   KC_ESC,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                       KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-  KC_TAB,   KC_ASTR, KC_1,    KC_2,    KC_3,    KC_PLUS,                     KC_WH_U, KC_MS_L, KC_MS_U, KC_MS_R, KC_NO,   KC_F12,
-  CMD_FN,   KC_SLSH, KC_4,    KC_5,    KC_6,    KC_MINS,                     KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_PSCR, KC_QUOT,
-  KC_LSFT,  KC_CIRC, KC_7,    KC_8,    KC_9,    KC_DOT,  FN_LBRC, FN_RBRC,  KC_INS,  KC_PAUS, KC_SCRL, KC_NUM,  KC_PSCR, KC_RSFT,
-                   KC_LCTL, KC_LOPT, KC_LGUI, KC_0,                        KC_ENT,  KC_BSPC, KC_DEL,  KC_RCTL
+  KC_TAB,   KC_ASTR, KC_1,    KC_2,    KC_3,    KC_PLUS,                     KC_MS_WH_UP, KC_MS_L, KC_MS_U, KC_MS_R, KC_NO, KC_F12,
+  CMD_FN,   KC_SLSH, KC_4,    KC_5,    KC_6,    KC_MINS,                     KC_MS_WH_DOWN,KC_MS_L,KC_MS_D,KC_MS_R,KC_PSCR,KC_QUOT,
+  KC_LSFT,  KC_CIRC, KC_7,    KC_8,    KC_9,    KC_DOT,  KC_TRNS, KC_TRNS,  KC_INS,  KC_PAUS, KC_SCRL, KC_NUM,  KC_PSCR, ENT_SFT,
+                   KC_LCTL, KC_LOPT, KC_LGUI, KC_SPC,                      KC_ENT,  KC_BSPC, OPT_DEL, KC_TRNS
 )
 };
+
 
 //
 // Rotate OLED display
